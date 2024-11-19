@@ -9,15 +9,9 @@ Uno de los criterios que se tiende a confundir es el término de bases de datos 
 
 Las relaciones en MongoDB se pueden modelar en 2 enfoques diferentes: la relación incrustada o relación referenciada. La elección de estos enfoques dependerá del tipo de casuística a abordar y decisiones de modelamiento de datos.
 
-## Relación incrustada
-
-Relación que implica almacenar documentos secundarios incrustados dentro de un documento principal.
-
-![Incrustada](./img/Incrustada.png)
-
 ## Relaciones referenciadas
 
-Práctica de almacenar manualmente el campo \_id de un documento relacionado como referencia en otro documento. Esto implica que el desarrollador es responsable de mantener la coherencia de las referencias y realizar las consultas necesarias para obtener los detalles completos de los documentos relacionados.
+Utilizamos el modelo referencial ya que es escalable, flexible consistente con los datos y al tener los datos relacionados en colecciones separadas son mas faciles de mantener y organizar en la base de datos.
 
 ![Referenciada](./img/Referenciada.png)
 
@@ -40,70 +34,16 @@ Basandose en el siguiente diagrama de entidad-relacion (DER) utilizado para una 
 
 ![DER](./img/DER.png)
 
-### Descripción del modelo DER
-
-- Un **Producto** puede tener muchos fabricantes, y un **Fabricante** puede fabricar muchos productos.
-- Un **Producto** puede tener muchos componentes, y un **Componente** puede formar parte de varios productos.
-
-### Base de datos
-
-El motor de base de datos a utilizar deberá ser **Mongo DB**. Se recomeniendo utilizar el archivo docker compose incluido en este proyecto para que puedan instanciar el motor de base de datos y un cliente del mismo para consultar las colecciones de forma dockerizada.
+### Clonar repositorio
+Dentro de una terminal CMD o BASH copiar y dar enter a la siguiente línea para la instalación del repositorio en su pc.
+```
+git clone https://github.com/EP-2024C2/tp-mongo-grupo2.git
+```
 
 ### Intalacion de dependencias
+Debera contar con las dependencias de produccion y desarrollo necesarias de un proyecto node. Dentro del editor de código o en la misma terminal dentro del repositorio deberá correr el siguiente comando:
 
-Debera contar con las dependencias de produccion y desarrollo necesarias de un proyecto node. Por ejemplo:
-
-`npm i mongoose express`
-
-`npm i -D nodemon`
-
-### Tips - Conexión a un base de datos
-
-```
-const mongoose = require('mongoose')
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://admin:admin1234@localhost:27017/seriesMongo?authSource=admin'
-async function connectToDatabase() {
-    try {
-        mongoose.set('strictQuery', false);
-        await mongoose.connect(MONGO_URL);
-        console.log('Conexión a mongo con éxito');
-    } catch (err) {
-        console.error('Error al conectarse a mongo', err);
-    }
-}
-
-module.exports = {connectToDatabase, mongoose}
-```
-
-- Ejemplo de como generar un modelo simple
-
-```
-const mongoose = require('./db').mongoose;
-
-const seriesSchema = new mongoose.Schema({
-    titulo: {
-        type: String,
-        required: true,
-    },
-    temporada: {
-        type: Number,
-        required: true,
-    },
-    genero: {
-        type: String,
-    },
-    capitulos: [{
-        titulo: { type: String, required: true },  // Título del capítulo
-        duracion: { type: Number },  // Duración en minutos
-        numero: { type: Number },  // Número de capítulo en la temporada
-        descripcion: { type: String }  // Breve descripción del capítulo
-    }]
-});
-
-const Series = mongoose.model('Series', seriesSchema);
-
-module.exports = Series;
-```
+```npm i```
 
 ## API
 
