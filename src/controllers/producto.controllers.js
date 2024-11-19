@@ -15,7 +15,7 @@ const addProducto = async (req,res) => {
 productosController.addProducto= addProducto
 
 const getProductos = async (req,res) => {
-    const productos = await Producto.findAll()
+    const productos = await Producto.find()
     res.status(200).json(productos)
 }
 productosController.getProductos = getProductos

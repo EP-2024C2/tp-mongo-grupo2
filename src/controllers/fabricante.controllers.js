@@ -15,7 +15,7 @@ const addFabricante = async (req, res) => {
 fabricantesController.addFabricante = addFabricante
 
 const getFabricantes = async (req, res) => {
-    const fabricantes = await Fabricante.findAll()
+    const fabricantes = await Fabricante.find()
     res.status(200).json(fabricantes)
 }
 fabricantesController.getFabricantes = getFabricantes

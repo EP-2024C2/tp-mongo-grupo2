@@ -16,7 +16,7 @@ const addComponente = async (req, res) => {
 componenteController.addComponente = addComponente
 
 const getComponentes = async (req, res) => {
-    const componentes = await Componente.findAll()
+    const componentes = await Componente.find()
     res.status(200).json(componentes)
 }
 componenteController.getComponentes = getComponentes
