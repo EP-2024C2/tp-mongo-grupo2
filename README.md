@@ -11,7 +11,7 @@ Las relaciones en MongoDB se pueden modelar en 2 enfoques diferentes: la relaci√
 
 ## Relaciones referenciadas
 
-Utilizamos el modelo referencial ya que es escalable, flexible consistente con los datos y al tener los datos relacionados en colecciones separadas son mas faciles de mantener y organizar en la base de datos.
+Utilizamos el modelo referencial ya que es escalable, flexible ,consistente con los datos y al tener los datos relacionados en colecciones separadas son mas faciles de mantener y organizar en la base de datos.
 
 ![Referenciada](./img/Referenciada.png)
 
