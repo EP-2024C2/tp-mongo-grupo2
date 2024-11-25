@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://admin:admin1234@localhost:27017/seriesMongo?authSource=admin'
+const MONGO_URL = process.env.MONGO_URL || 'mongodb://Grupo2:123456@localhost:27017/'
 
 async function connectToDatabase() {
     try {
