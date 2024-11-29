@@ -12,6 +12,6 @@ const PORT = process.env.PORT ?? 3000
 
 app.listen(PORT, async () => {
     await connectToDatabase()
-    await initialProductoFabricanteComponente
+    await initialProductoFabricanteComponente()
     console.log('Aplicación corriendo en el puerto: ', PORT)
 })

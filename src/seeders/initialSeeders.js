@@ -1,3 +1,4 @@
+const {Producto,Fabricante,Componente} = require('../models')
 async function seedDatabase() {
     try {
         await Producto.deleteMany({});
