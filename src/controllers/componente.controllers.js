@@ -1,4 +1,4 @@
-const { componenteAActualizar, Producto, Componente } = require('../models')
+const { Fabricante, Producto, Componente } = require('../models')
 const componenteController = {}
 const mongoose = require('../db/server').mongoose;
 
@@ -20,14 +20,14 @@ const getComponentes = async (req, res) => {
     res.status(200).json(componentes)
 }
 componenteController.getComponentes = getComponentes
-//funciona no subido
+
 const getComponenteById = async (req, res) => {
     const id = req.params.id
     const componente = await Componente.findById(id)
     res.status(200).json(componente)
 }
 componenteController.getComponenteById = getComponenteById
-//funciona no subido
+
 const updateComponente = async (req, res) => {
     const { nombre, descripcion } = req.body
     const id = req.params.id
@@ -36,7 +36,7 @@ const updateComponente = async (req, res) => {
     res.status(200).json({ mensaje: 'el componente fue actualizado correctamente' })
 }
 componenteController.updateComponente = updateComponente
-//funciona a medias, falta no poder eliminar si tiene relacion
+//falta no poder eliminar si tiene relacion
 const deleteComponenteById = async (req, res) => {
     const id = req.params.id
     try {
@@ -48,17 +48,19 @@ const deleteComponenteById = async (req, res) => {
 }
 componenteController.deleteComponenteById = deleteComponenteById
 
-const componentesDelProductoConId = async (req, res) => {
-    /*const componente = req.modelo || await Componente.findById(req.params.id);
-    const componenteConProductos = await componente.populate({
-        path: 'productos',
-        select: '-componenteAActualizars -componentes'
-    });
-    res.status(200).json(componenteConProductos)*/
+const productosDelComponenteConId = async (req, res) => {
     const id = req.params.id;
-    const componente = await Componente.findById(id).populate('productos')
-    res.status(200).json(componente.productos)
+    const productosDelComponente = await Componente.findById(id).populate({
+        path: "productos",
+        select: "-componentes",
+        populate: {
+            path: "fabricantes",
+            select: "-productos",
+        }
+
+    })
+    res.status(200).json(productosDelComponente)
 }
-componenteController.componentesDelProductoConId = componentesDelProductoConId
+componenteController.productosDelComponenteConId = productosDelComponenteConId
 
 module.exports = componenteController

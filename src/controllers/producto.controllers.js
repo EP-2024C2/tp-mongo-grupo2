@@ -13,25 +13,25 @@ const addProducto = async (req, res) => {
     }
 }
 productosController.addProducto = addProducto
-//funciona no subido
+
 const getProductos = async (req, res) => {
     const productos = await Producto.find()
     res.status(200).json(productos)
 }
 productosController.getProductos = getProductos
-//funciona no subido
+
 const getProductoById = async (req, res) => {
     const id = req.params.id
     const producto = await Producto.findById(id)
     res.status(200).json(producto)
 }
 productosController.getProductoById = getProductoById
-//funciona no subido
+
 const updateProducto = async (req, res) => {
     const { nombre, descripcion, precio, pathImg } = req.body
     const id = req.params.id
-    const producto = await Producto.findById(id)
-    await producto.updateOne({ nombre, descripcion, precio, pathImg })
+    const productoAActualizar = await Producto.findById(id)
+    await productoAActualizar.updateOne({ nombre, descripcion, precio, pathImg })
     res.status(200).json({ mensaje: 'el producto fue actualizado correctamente' })
 }
 productosController.updateProducto = updateProducto
@@ -40,7 +40,7 @@ const associateProductoConFabricantes = async (req, res) => {
 
 }
 productosController.associateProductoConFabricantes = associateProductoConFabricantes */
-//funciona a medias, falta no poder eliminar si tiene relacion
+//falta no poder eliminar si tiene relacion
 const deleteProductoById = async (req, res) => {
     const id = req.params.id
     try {
@@ -56,18 +56,23 @@ const associateProductoConComponentes = async (req, res) => {
 
 }
 productosController.associateProductoConComponentes = associateProductoConComponentes*/
-//funciona no subido
+
 const fabricantesDelProductoConId = async (req, res) => {
     const id = req.params.id;
-    const producto = await Producto.findById(id).populate('fabricantes')
-    res.status(200).json(producto.fabricantes)
+    const fabricantesDelProducto = await Producto.findById(id).populate({
+        path: "fabricantes", select: "-componentes"
+    })
+    res.status(200).json(fabricantesDelProducto)
 }
 productosController.fabricantesDelProductoConId = fabricantesDelProductoConId
-//funciona no subido
+
 const componentesDelProductoConId = async (req, res) => {
     const id = req.params.id;
-    const producto = await Producto.findById(id).populate('componentes')
-    res.status(200).json(producto.componentes)
+    const componentesDelProducto = await Producto.findById(id).populate({
+        path: "componentes",
+        select: "-fabricantes",
+    })
+    res.status(200).json(componentesDelProducto)
 }
 productosController.componentesDelProductoConId = componentesDelProductoConId
 
