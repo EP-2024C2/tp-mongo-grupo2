@@ -1,13 +1,16 @@
 const { Router } = require('express')
 const productoController = require('../controllers/producto.controllers')
 const { validarId } = require('../middelware/ValidarId')
-const { Producto } = require('../models')
+const Producto = require('../models')
+const schemasValidador = require('../middelware/schemasValidador')
+const productoSchema = require('../schemas/producto.schema')
+
 
 const routes = Router()
 
 routes.get('/', productoController.getProductos)
 routes.get('/:id', validarId(Producto), productoController.getProductoById)
-routes.post('/', productoController.addProducto)
+routes.post('/',schemasValidador(productoSchema), productoController.addProducto)
 routes.put('/:id', validarId(Producto), productoController.updateProducto)
 routes.delete('/:id', validarId(Producto), productoController.deleteProductoById)
 //routes.post('/productos/:id/fabricantes', validarId(Producto), productoController.associateProductoConFabricantes)
