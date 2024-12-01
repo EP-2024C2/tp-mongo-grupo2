@@ -18,7 +18,7 @@ const productosSchema = new mongoose.Schema({
         type: Schema.Types.String
     },
     fabricantes: [{ type: Schema.Types.ObjectId, ref: 'Fabricante' }],
-    componente: [{ type: Schema.Types.ObjectId, ref: 'Componente' }]
+    componentes: [{ type: Schema.Types.ObjectId, ref: 'Componente' }]
 });
 
 module.exports = mongoose.model('Producto', productosSchema);
