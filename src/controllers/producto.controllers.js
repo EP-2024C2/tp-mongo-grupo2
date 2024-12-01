@@ -37,7 +37,7 @@ const updateProducto = async (req, res) => {
 productosController.updateProducto = updateProducto
 /*
 const associateProductoConFabricantes = async (req, res) => {
-
+  
 }
 productosController.associateProductoConFabricantes = associateProductoConFabricantes */
 //falta no poder eliminar si tiene relacion
@@ -51,6 +51,7 @@ const deleteProductoById = async (req, res) => {
     }
 }
 productosController.deleteProductoById = deleteProductoById
+//routes.post('/productos/:id/componentes 
 /*
 const associateProductoConComponentes = async (req, res) => {
 
@@ -59,8 +60,8 @@ productosController.associateProductoConComponentes = associateProductoConCompon
 
 const fabricantesDelProductoConId = async (req, res) => {
     const id = req.params.id;
-    const fabricantesDelProducto = await Producto.findById(id).populate({
-        path: "fabricantes", select: "-componentes"
+    const fabricantesDelProducto = await Producto.findById(id).select("-componentes").populate({
+        path: "fabricantes", select: "-productos"
     })
     res.status(200).json(fabricantesDelProducto)
 }
@@ -68,9 +69,9 @@ productosController.fabricantesDelProductoConId = fabricantesDelProductoConId
 
 const componentesDelProductoConId = async (req, res) => {
     const id = req.params.id;
-    const componentesDelProducto = await Producto.findById(id).populate({
+    const componentesDelProducto = await Producto.findById(id).select("-fabricantes").populate({
         path: "componentes",
-        select: "-fabricantes",
+        select: "-productos"
     })
     res.status(200).json(componentesDelProducto)
 }
