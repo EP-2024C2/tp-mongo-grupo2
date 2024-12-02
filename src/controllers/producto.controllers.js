@@ -43,12 +43,7 @@ const updateProducto = async (req, res) => {
     }
 }
 productosController.updateProducto = updateProducto
-/*
-const associateProductoConFabricantes = async (req, res) => {
-  
-}
-productosController.associateProductoConFabricantes = associateProductoConFabricantes */
-//falta no poder eliminar si tiene relacion
+
 const deleteProductoById = async (req, res) => {
     const id = req.params.id
     try {
@@ -59,12 +54,6 @@ const deleteProductoById = async (req, res) => {
     }
 }
 productosController.deleteProductoById = deleteProductoById
-//routes.post('/productos/:id/componentes 
-/*
-const associateProductoConComponentes = async (req, res) => {
-
-}
-productosController.associateProductoConComponentes = associateProductoConComponentes*/
 
 const fabricantesDelProductoConId = async (req, res) => {
     const id = req.params.id;

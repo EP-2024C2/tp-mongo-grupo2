@@ -1,4 +1,5 @@
-const { Fabricante, Producto, Componente } = require('../models')
+const { Fabricante, Producto, Componente } = require('../models');
+const componente = require('../models/componente');
 const componenteController = {}
 const mongoose = require('../db/server').mongoose;
 
@@ -48,8 +49,8 @@ componenteController.updateComponente = updateComponente
 const deleteComponenteById = async (req, res) => {
     const id = req.params.id
     try {
-        await Componente.findByIdAndDelete(id)
-        res.json({ mensaje: `el componente fue eliminado` })
+        const componente = await Componente.findByIdAndDelete(id)
+        res.status(200).json({ mensaje: `el componente fue eliminado` })
     } catch {
         res.status(500).json({ mensaje: `error al elimninar el componente` })
     }
