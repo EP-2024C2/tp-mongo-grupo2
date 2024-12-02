@@ -23,17 +23,25 @@ componenteController.getComponentes = getComponentes
 
 const getComponenteById = async (req, res) => {
     const id = req.params.id
-    const componente = await Componente.findById(id)
-    res.status(200).json(componente)
+    try{
+        const componente = await Componente.findById(id)
+        res.status(200).json(componente)
+    }catch(error){
+        res.status(404).json({mensaje:`Error al obtener el componente ${error.mensaje}`});
+    }
 }
 componenteController.getComponenteById = getComponenteById
 
 const updateComponente = async (req, res) => {
     const { nombre, descripcion } = req.body
     const id = req.params.id
-    const componenteAActualizar = await Componente.findById(id)
-    await componenteAActualizar.updateOne({ nombre, descripcion })
-    res.status(200).json({ mensaje: 'el componente fue actualizado correctamente' })
+    try{
+        const componenteAActualizar = await Componente.findById(id)
+        await componenteAActualizar.updateOne({ nombre, descripcion })
+        res.status(200).json({ mensaje: 'el componente fue actualizado correctamente' })
+    }catch(error){
+        res.status(404).json({mensaje:`Error al actualizar el componente ${error.mensaje}`});
+    }
 }
 componenteController.updateComponente = updateComponente
 //falta no poder eliminar si tiene relacion

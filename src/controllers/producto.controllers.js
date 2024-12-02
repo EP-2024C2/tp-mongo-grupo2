@@ -15,8 +15,12 @@ const addProducto = async (req, res) => {
 productosController.addProducto = addProducto
 
 const getProductos = async (req, res) => {
-    const productos = await Producto.find()
-    res.status(200).json(productos)
+    try{
+        const productos = await Producto.find()
+        res.status(200).json(productos)
+    }catch(error){
+        res.status(404).json({mensaje:`Error al obtener el producto ${error.mensaje}`});
+    }
 }
 productosController.getProductos = getProductos
 
@@ -28,11 +32,15 @@ const getProductoById = async (req, res) => {
 productosController.getProductoById = getProductoById
 
 const updateProducto = async (req, res) => {
-    const { nombre, descripcion, precio, pathImg } = req.body
-    const id = req.params.id
-    const productoAActualizar = await Producto.findById(id)
-    await productoAActualizar.updateOne({ nombre, descripcion, precio, pathImg })
-    res.status(200).json({ mensaje: 'el producto fue actualizado correctamente' })
+    try{
+        const { nombre, descripcion, precio, pathImg } = req.body
+        const id = req.params.id
+        const productoAActualizar = await Producto.findById(id)
+        await productoAActualizar.updateOne({ nombre, descripcion, precio, pathImg })
+        res.status(200).json({ mensaje: 'el producto fue actualizado correctamente' })
+    }catch(error){
+        res.status(404).json({mensaje:`Error al actualizar el producto ${error.mensaje}`});
+    }
 }
 productosController.updateProducto = updateProducto
 /*
