@@ -15,11 +15,11 @@ const addProducto = async (req, res) => {
 productosController.addProducto = addProducto
 
 const getProductos = async (req, res) => {
-    try{
+    try {
         const productos = await Producto.find()
         res.status(200).json(productos)
-    }catch(error){
-        res.status(404).json({mensaje:`Error al obtener el producto ${error.mensaje}`});
+    } catch (error) {
+        res.status(404).json({ mensaje: `Error al obtener el producto ${error.mensaje}` });
     }
 }
 productosController.getProductos = getProductos
@@ -32,14 +32,14 @@ const getProductoById = async (req, res) => {
 productosController.getProductoById = getProductoById
 
 const updateProducto = async (req, res) => {
-    try{
+    try {
         const { nombre, descripcion, precio, pathImg } = req.body
         const id = req.params.id
         const productoAActualizar = await Producto.findById(id)
         await productoAActualizar.updateOne({ nombre, descripcion, precio, pathImg })
         res.status(200).json({ mensaje: 'el producto fue actualizado correctamente' })
-    }catch(error){
-        res.status(404).json({mensaje:`Error al actualizar el producto ${error.mensaje}`});
+    } catch (error) {
+        res.status(404).json({ mensaje: `Error al actualizar el producto ${error.mensaje}` });
     }
 }
 productosController.updateProducto = updateProducto
@@ -47,13 +47,37 @@ productosController.updateProducto = updateProducto
 const deleteProductoById = async (req, res) => {
     const id = req.params.id
     try {
-        await Producto.find(id);
-        res.status(200).json({ mensaje: `el producto fue eliminado` })
+        const producto = await Producto.findById(id)
+        if (producto.fabricantes.length === 0 && producto.componentes.length === 0) {
+            await Producto.findByIdAndDelete(id)
+            res.status(200).json({ mensaje: `el producto fue eliminado` })
+        } else {
+            res.json({ mensaje: `el producto tiene fabricantes o componentes asociados` })// FALTA STATUS
+        }
     } catch {
         res.status(500).json({ mensaje: `error al elimninar el producto` })
     }
 }
 productosController.deleteProductoById = deleteProductoById
+
+const associateProductoConFabricantes = async (req, res) => {
+    const { id } = req.params
+    const arrFabricantes = req.body
+    const producto = await Producto.findById(id)
+    // PEDIR QUE LO INGRESADO SEA UN ARRAY
+    for (const unFabricante of arrFabricantes) {
+        const nuevoFabricante = { ...unFabricante }
+        const fabricante = await Fabricante.create(nuevoFabricante)
+        producto.fabricantes.push(fabricante._id)
+        fabricante.productos.push(producto._id)
+        await fabricante.save()
+    }
+    await producto.save()
+
+    res.status(201).json(producto)
+
+}
+productosController.associateProductoConFabricantes = associateProductoConFabricantes
 
 const fabricantesDelProductoConId = async (req, res) => {
     const id = req.params.id;
@@ -63,6 +87,24 @@ const fabricantesDelProductoConId = async (req, res) => {
     res.status(200).json(fabricantesDelProducto)
 }
 productosController.fabricantesDelProductoConId = fabricantesDelProductoConId
+
+const associateProductoConComponentes = async (req, res) => {
+    const { id } = req.params
+    const arrComponentes = req.body
+    const producto = await Producto.findById(id)
+    //PEDIR QUE LO INGRESADO SEA UN ARRAY
+    for (const unComponente of arrComponentes) {
+        const nuevoComponente = { ...unComponente }
+        const componente = await Componente.create(nuevoComponente)
+        producto.componentes.push(componente._id)
+        componente.productos.push(producto._id)
+        await componente.save()
+    }
+    await producto.save()
+
+    res.status(201).json(producto)
+}
+productosController.associateProductoConComponentes = associateProductoConComponentes
 
 const componentesDelProductoConId = async (req, res) => {
     const id = req.params.id;
