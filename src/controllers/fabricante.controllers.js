@@ -43,7 +43,7 @@ const updateFabricante = async (req, res) => {
     }
 }
 fabricantesController.updateFabricante = updateFabricante
-//falta no poder eliminar si tiene relacion
+
 const deleteFabricanteById = async (req, res) => {
     const id = req.params.id;
     try {
