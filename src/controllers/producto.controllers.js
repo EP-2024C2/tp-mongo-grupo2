@@ -52,7 +52,7 @@ const deleteProductoById = async (req, res) => {
             await Producto.findByIdAndDelete(id)
             res.status(200).json({ mensaje: `el producto fue eliminado` })
         } else {
-            res.json({ mensaje: `el producto tiene fabricantes o componentes asociados` })// FALTA STATUS
+            res.status(400).json({ mensaje: `el producto tiene fabricantes o componentes asociados` })
         }
     } catch {
         res.status(500).json({ mensaje: `error al elimninar el producto` })
@@ -61,21 +61,28 @@ const deleteProductoById = async (req, res) => {
 productosController.deleteProductoById = deleteProductoById
 
 const associateProductoConFabricantes = async (req, res) => {
-    const { id } = req.params
-    const arrFabricantes = req.body
-    const producto = await Producto.findById(id)
-    // PEDIR QUE LO INGRESADO SEA UN ARRAY
-    for (const unFabricante of arrFabricantes) {
-        const nuevoFabricante = { ...unFabricante }
-        const fabricante = await Fabricante.create(nuevoFabricante)
-        producto.fabricantes.push(fabricante._id)
-        fabricante.productos.push(producto._id)
-        await fabricante.save()
+    try {
+        const { id } = req.params;
+        const arrFabricantes = req.body;
+        // Verificar que arrFabricantes sea un array 
+        if (!Array.isArray(arrFabricantes)) {
+            return res.status(400).json({ error: 'El cuerpo de la solicitud debe ser un array de fabricantes' });
+        }
+        const producto = await Producto.findById(id);
+
+        if (!producto) { return res.status(404).json({ error: 'Producto no encontrado' }); }
+        for (const unFabricante of arrFabricantes) {
+            const nuevoFabricante = { ...unFabricante };
+            const fabricante = await Fabricante.create(nuevoFabricante);
+            producto.fabricantes.push(fabricante._id);
+            fabricante.productos.push(producto._id);
+            await fabricante.save();
+        }
+        await producto.save();
+        res.status(201).json({ message: 'Producto y fabricantes asociados correctamente', producto });
+    } catch (error) {
+        res.status(404).json({ error: 'Producto no encontrado' });
     }
-    await producto.save()
-
-    res.status(201).json(producto)
-
 }
 productosController.associateProductoConFabricantes = associateProductoConFabricantes
 
@@ -89,20 +96,29 @@ const fabricantesDelProductoConId = async (req, res) => {
 productosController.fabricantesDelProductoConId = fabricantesDelProductoConId
 
 const associateProductoConComponentes = async (req, res) => {
-    const { id } = req.params
-    const arrComponentes = req.body
-    const producto = await Producto.findById(id)
-    //PEDIR QUE LO INGRESADO SEA UN ARRAY
-    for (const unComponente of arrComponentes) {
-        const nuevoComponente = { ...unComponente }
-        const componente = await Componente.create(nuevoComponente)
-        producto.componentes.push(componente._id)
-        componente.productos.push(producto._id)
-        await componente.save()
-    }
-    await producto.save()
+    try {
+        const { id } = req.params;
+        const arrComponentes = req.body;
+        // Verificar que arrComponentes sea un array 
+        if (!Array.isArray(arrComponentes)) {
+            return res.status(400).json({ error: 'El cuerpo de la solicitud debe ser un array de componentes' });
+        }
+        const producto = await Producto.findById(id);
 
-    res.status(201).json(producto)
+        if (!producto) { return res.status(404).json({ error: 'Producto no encontrado' }); }
+        for (const unComponente of arrComponentes) {
+            const nuevoComponente = { ...unComponente };
+            const componente = await Componente.create(nuevoComponente);
+            producto.componentes.push(componente._id);
+            componente.productos.push(producto._id);
+            await componente.save();
+        }
+        await producto.save();
+        res.status(201).json({ message: 'Producto y componentes asociados correctamente', producto });
+
+    } catch (error) {
+        res.status(404).json({ error: 'Producto no encontrado' });
+    }
 }
 productosController.associateProductoConComponentes = associateProductoConComponentes
 

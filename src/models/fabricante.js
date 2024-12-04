@@ -22,11 +22,11 @@ const fabricantesSchema = new mongoose.Schema({
     productos: [{ type: Schema.Types.ObjectId, ref: 'Producto' }]
 });
 
-fabricantesSchema.set('toJSON',{
-    transform:(_,ret)=>{
-        //delete ret._id, //ESTA COMENTADO PARA PODER HACER PRUEBAS, DESCOMENTAR PARA QUE SE VEA BIEN
+fabricantesSchema.set('toJSON', {
+    transform: (_, ret) => {
+        delete ret._id,
         delete ret.__v
     }
 })
 
-module.exports =  mongoose.model('Fabricante', fabricantesSchema);
+module.exports = mongoose.model('Fabricante', fabricantesSchema);

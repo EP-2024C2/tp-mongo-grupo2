@@ -13,9 +13,9 @@ const componentesSchema = new mongoose.Schema({
     productos: [{ type: Schema.Types.ObjectId, ref: 'Producto' }]
 });
 
-componentesSchema.set('toJSON',{
-    transform:(_,ret)=>{
-        //delete ret._id, //ESTA COMENTADO PARA PODER HACER PRUEBAS, DESCOMENTAR PARA QUE SE VEA BIEN
+componentesSchema.set('toJSON', {
+    transform: (_, ret) => {
+        delete ret._id,
         delete ret.__v
     }
 })

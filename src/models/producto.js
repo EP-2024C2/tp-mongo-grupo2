@@ -23,7 +23,7 @@ const productosSchema = new mongoose.Schema({
 
 productosSchema.set('toJSON',{
     transform:(_,ret)=>{
-        //delete ret._id, //ESTA COMENTADO PARA PODER HACER PRUEBAS, DESCOMENTAR PARA QUE SE VEA BIEN
+        delete ret._id,
         delete ret.__v
     }
 })
