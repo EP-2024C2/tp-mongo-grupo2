@@ -13,7 +13,9 @@ routes.get('/:id', validarId(Producto), productoController.getProductoById)
 routes.post('/',schemasValidador(productoSchema), productoController.addProducto)
 routes.put('/:id', validarId(Producto), productoController.updateProducto)
 routes.delete('/:id', validarId(Producto), productoController.deleteProductoById)
+routes.post('/:id/fabricantes', validarId(Producto), productoController.associateProductoConFabricantes)
 routes.get('/:id/fabricantes', validarId(Producto), productoController.fabricantesDelProductoConId)
+routes.post('/:id/componentes', validarId(Producto), productoController.associateProductoConComponentes)
 routes.get('/:id/componentes', validarId(Producto), productoController.componentesDelProductoConId)
 
 module.exports = routes

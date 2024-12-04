@@ -21,4 +21,11 @@ const productosSchema = new mongoose.Schema({
     componentes: [{ type: Schema.Types.ObjectId, ref: 'Componente' }]
 });
 
+productosSchema.set('toJSON',{
+    transform:(_,ret)=>{
+        //delete ret._id, //ESTA COMENTADO PARA PODER HACER PRUEBAS, DESCOMENTAR PARA QUE SE VEA BIEN
+        delete ret.__v
+    }
+})
+
 module.exports = mongoose.model('Producto', productosSchema);
